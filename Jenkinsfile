@@ -5,7 +5,7 @@ pipeline {
                 steps{
                     sh 'echo "starting the pipeline"'
                     sh 'mkdir mrinalfolder'
-                    echo 'test 2 worked'
+                    echo 'test 5 worked'
                     
                 }
             }
