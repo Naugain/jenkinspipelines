@@ -1,7 +1,7 @@
 pipeline {
     agent any
-        Stages ('test1') {
-            stage{
+        stages {
+            stage ('First test') {
                 steps{
                     sh 'echo "starting the pipeline"'
                     sh 'mkdir mrinalfolder'
