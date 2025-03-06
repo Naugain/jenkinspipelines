@@ -4,7 +4,7 @@ pipeline {
             stage ('First test') {
                 steps{
                     sh 'echo "starting the pipeline"'
-                    sh 'mkdir mrinalfolder'
+                    sh 'mkdir mrinalfolder || echo "file exists"'
                     echo 'test 5 worked'
                     
                 }
