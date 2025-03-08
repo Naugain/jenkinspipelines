@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 /* change to check git fetch & merge */
-=======
-/* badlaw to create conflict */
->>>>>>> 2dfad3b (farzi commit)
 pipeline {
     agent any
         stages {
