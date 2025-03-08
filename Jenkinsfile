@@ -1,3 +1,4 @@
+/* change to check git fetch & merge */
 pipeline {
     agent any
         stages {
