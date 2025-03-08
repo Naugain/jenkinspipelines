@@ -1,5 +1,6 @@
 
 pipeline {
+<<<<<<< HEAD
     // Possibilities for agent
     agent any // Runs on any available agent
     agent none // No default agent, each stage must define its own
@@ -337,6 +338,16 @@ pipeline {
                     } else {
                         echo "Deployment successful, no rollback needed."
                     }
+=======
+    agent any
+        stages {
+            stage ('First test') {
+                steps{
+                    sh 'echo "starting the pipeline"'
+                    sh 'mkdir mrinalfolder'
+                    echo 'test 5 worked'
+                    
+>>>>>>> parent of 83075ac (error handeling added)
                 }
             }
         }
