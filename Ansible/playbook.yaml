@@ -1,5 +1,49 @@
-- name: jenkins server setup playbook
-  hosts: jenkins_server
+---
+- name: Update server, install Java, and Jenkins
+  hosts: your_dnf_servers
   become: true
   tasks:
-      - name: 
+    - name: Update all packages
+      ansible.builtin.dnf:
+        state: latest
+
+    - name: Install Java (OpenJDK 11 as a common choice)
+      ansible.builtin.dnf:
+        name: java-11-openjdk-headless
+        state: present
+
+    - name: Add Jenkins repository
+      ansible.builtin.command:
+        cmd: "sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo"
+      args:
+        creates: /etc/yum.repos.d/jenkins.repo
+
+    - name: Import Jenkins GPG key
+      ansible.builtin.rpm_key:
+        state: present
+        key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+
+    - name: Install Jenkins
+      ansible.builtin.dnf:
+        name: jenkins
+        state: present
+
+    - name: Start and enable Jenkins service
+      ansible.builtin.service:
+        name: jenkins
+        state: started
+        enabled: true
+
+    - name: Open Jenkins port in firewall (if firewalld is active)
+      ansible.builtin.firewalld:
+        port: 8080/tcp
+        permanent: true
+        state: enabled
+      when: ansible_service_mgr == 'systemd' and ansible_distribution == 'Fedora' # Adjust for other DNF systems
+      notify: Reload firewalld
+
+  handlers:
+    - name: Reload firewalld
+      ansible.builtin.service:
+        name: firewalld
+        state: reloaded
