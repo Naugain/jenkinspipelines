@@ -1,0 +1,5 @@
+- name: jenkins server setup playbook
+  hosts: jenkins_server
+  become: true
+  tasks:
+      - name: 
