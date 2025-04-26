@@ -1,6 +1,6 @@
 ---
 - name: Update server, install Java, and Jenkins
-  hosts: your_dnf_servers
+  hosts: jenkins_server
   become: true
   tasks:
     - name: Update all packages
