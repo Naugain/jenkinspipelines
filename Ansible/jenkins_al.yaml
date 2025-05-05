@@ -1,0 +1,39 @@
+---
+- name: jenkins server setup on al2023
+  hosts: jenkins_server
+  become: true
+
+  vars:
+    Java_package: "java-17-amazon-corretto.x86_64"
+
+  tasks:
+    - name: update & upgrade
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+
+    - name: install java-17-amazon-corretto.x86_64
+      ansible.builtin.dnf:
+        name: "{{Java_package}}"
+        state: present
+    
+    - name: Download jenkins repo file
+      ansible.builtin.get_url:
+        url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+        dest: /etc/yum.repos.d/jenkins.repo
+
+    - name: Import GRP key
+      ansible.builtin.rpm_key:
+        state: present
+        key: https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+
+    - name: Install jenkins
+      ansible.builtin.package:
+        name: jenkins
+        state: present
+
+    - name: Start & Enable jenkins
+      ansible.builtin.service:
+        name: jenkins
+        state: started
+        enabled: yes

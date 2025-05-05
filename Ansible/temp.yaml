@@ -1,0 +1,42 @@
+---
+- name: Set up NGINX server on EC2 instance
+  hosts: ec2
+  become: true  # Run tasks with sudo privileges
+ 
+  vars:
+    nginx_port: 80
+ 
+  tasks:
+    # Update package manager cache
+    - name: Update package manager cache
+      apt:
+        update_cache: yes
+ 
+    # Install NGINX
+    - name: Install NGINX
+      apt:
+        name: nginx
+        state: present
+ 
+    # Ensure NGINX is running
+    - name: Ensure NGINX service is started and enabled
+      service:
+        name: nginx
+        state: started
+        enabled: true
+ 
+    # Configure default NGINX port
+    - name: Configure NGINX to listen on a specific port
+      lineinfile:
+        path: /etc/nginx/sites-available/default
+        regexp: "listen 80;"
+        line: "listen {{ nginx_port }};"
+      notify:
+        - Restart NGINX
+ 
+  handlers:
+    # Handler to restart NGINX after configuration changes
+    - name: Restart NGINX
+      service:
+        name: nginx
+        state: restarted

@@ -1,0 +1,26 @@
+---
+- name: webserver server setup
+  hosts: jenkins_server
+  become: true
+
+  vars:
+    webserver: nginx
+    webserver_port: 80/tcp
+
+  tasks:
+      - name: Install webserver
+        ansible.builtin.package:
+          name: "{{webserver}}"
+          state: present
+          
+      - name: Start & Enable webserver
+        ansible.builtin.package:
+          name: "{{webserver}}"
+          state: started
+          enabled: yes
+
+      - name: webserver_port mapping
+        ansible.builtin.firewalld:
+          port: "{{webserver_port}}/tcp"
+          permanent: ture
+          state: enabled

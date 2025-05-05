@@ -1,0 +1,29 @@
+---
+- name: User management playbook
+  hosts: jenkins_server
+  become: true
+
+  vars:
+    users:
+      - ram
+      - shyam
+      - balram
+      - ghanshyam
+    groups:
+      - devops
+      - ops
+      - qa
+
+  tasks:
+
+    - name: group creation
+      ansible.builtin.group:
+        name: devops
+        state: present
+        
+    - name: User creation simple
+      ansible.builtin.user:
+        name: ram
+        create_home: yes
+        shell: /bin/bash
+        group: devops
